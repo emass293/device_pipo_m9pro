@@ -1,0 +1,255 @@
+import init.rk30board.usb.rc
+import init.connectivity.rc
+
+on early-init
+    mkdir /metadata 0770 root root
+
+on init
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+    export SECONDARY_STORAGE /storage/sdcard1:/storage/usb0
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+
+    # External SD card
+    mkdir /storage/sdcard1 0000 root root
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    symlink /storage/sdcard1 /mnt/external_sd
+    symlink /storage/sdcard1 /external_sd
+  
+    # USB drive
+    mkdir /storage/usb0 0000 root root
+    mkdir /mnt/media_rw/usb0 0700 media_rw media_rw
+    symlink /storage/usb0 /mnt/usb_storage
+    symlink /storage/usb0 /usb_storage
+
+# for adobe reader mobile
+    export RK_ADOBE_DE_MOBILE 1
+    export EBOOK_PAGE_VISIBLE_NUMBER 2
+    export RK_ADEPT_DEVICE_TYPE mobile
+    export RK_ADOBE_DE_DOC_FOLDER "/mnt/sdcard/Digital Editions"
+    export RK_ADEPT_ACTIVATION_FILE /mnt/sdcard/.adobe-digital-editions/activation.xml
+    export RK_ADEPT_DEVICE_FILE /mnt/sdcard/.adobe-digital-editions/device.xml
+    export RK_ADEPT_DEVICE_SALT_FILE /mnt/sdcard/.adobe-digital-editions/devicesalt
+    export ADOBE_FONTS_DIR  /system/fonts/adobefonts/
+
+on fs
+    insmod /rk30xxnand_ko.ko
+    mount_all /fstab.rk30board
+    setprop ro.crypto.fuse_sdcard true
+
+on post-fs
+    insmod /system/lib/modules/ump.ko
+    insmod /drmboot.ko
+    insmod /system/lib/modules/mali.ko mali_dvfs=50,100,133,160,200,266,400 mali_init_clock=50
+    insmod /system/lib/modules/rk30_mirroring.ko
+    insmod /system/lib/modules/rk29-ipp.ko
+    insmod /system/lib/modules/tun.ko
+    insmod /system/lib/modules/lockd.ko
+    insmod /system/lib/modules/auth_rpcgss.ko
+    insmod /system/lib/modules/cifs.ko
+    insmod /system/lib/modules/md4.ko
+    insmod /system/lib/modules/sunrpc.ko
+    insmod /system/lib/modules/nfs.ko 
+    insmod /system/lib/modules/ntfs.ko
+    insmod /system/lib/modules/nls_utf8.ko
+
+
+# AP6476 GPS permission
+    chmod 755 /system/bin/glgps
+    chown root system /system/bin/glgps
+    chmod 644 /system/lib/hw/gps.default.so
+    chown root system /system/lib/hw/gps.default.so
+    mkdir /data/gps
+    chmod 770 /data/gps
+    chown system net_bt_stack /data/gps
+
+on post-fs-data
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+    chown media_rw media_rw /data/media
+
+    # Set indication (checked by vold) that we have finished this action
+    # setprop vold.post_fs_data_done 1
+
+on boot
+    setprop UserVolumeLabel "RockChips"
+    mount debugfs /sys/kernel/debug /sys/kernel/debug
+
+    chown system system /sys/devices/system/cpu/cpu1/online
+    chmod 0660 /sys/devices/system/cpu/cpu1/online
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+
+    #insmod /system/lib/modules/vpu_service.ko
+    #insmod /system/lib/modules/rtk_btusb.ko
+
+    #backlight
+    chown system system /sys/class/backlight/rk28_bl/brightness
+
+    # HDMI
+    chown root system /sys/class/display/HDMI/enable
+    chown root system /sys/class/display/HDMI/mode
+    chown root system /sys/class/display/HDMI/scale
+    chown root system /sys/class/graphics/fb0/blank
+    chmod 0664 /sys/class/graphics/fb0/blank
+
+    # Mali
+    chown system system /sys/mali400_utility/utility
+    chmod 0664 /sys/mali400_utility/utility
+
+    # Bluetooth: UART device
+    chmod 0660 /dev/ttyS0
+    chmod 0660 /dev/vflash
+    chown bluetooth net_bt_stack /dev/ttyS0
+    chown bluetooth net_bt_stack /dev/vflash
+
+    # Bluetooth: power up/down interface
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+
+    # Bluetooth: MAC address programming
+    chown bluetooth net_bt_stack /data/misc/bluetooth
+    chown bluetooth net_bt_stack ro.bt.bdaddr_path
+    setprop ro.bt.bdaddr_path "/data/misc/bluetooth/bt_addr"
+
+    # Bluetooth LPM
+    chmod 0220 /proc/bluetooth/sleep/lpm
+    chmod 0220 /proc/bluetooth/sleep/btwrite
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/lpm
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/btwrite
+
+
+# virtual sdcard daemon running as media_rw (1023)
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class main
+
+# fusewrapped external sdcard daemon running as media_rw (1023)
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+service fuse_usb0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usb0 /storage/usb0
+    class late_start
+    disabled
+
+service wfd /system/bin/wfd
+    class main
+    disabled
+    oneshot
+
+service hciattach /system/bin/brcm_patchram_plus --patchram bychip --baudrate 1500000 --enable_lpm --enable_hci /dev/ttyS0
+    console
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
+    class main
+	disabled
+	oneshot
+			
+service iprenew_eth0 system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/bugreport.sh
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116
+
+service chrome /system/bin/chrome.sh
+    class main
+    oneshot
+
+service charger /charger
+    class charger
+
+service akmd /system/bin/akmd
+        class main
+        user system
+        group system
+        oneshot
+
+on property:sys.gmali.performance=video
+    start pat_video
+
+on property:sys.gmali.performance=ui
+    start pat_ui
+
+service pat_video /system/bin/performance video
+    disabled
+    oneshot
+
+service pat_ui /system/bin/performance ui
+    disabled
+    oneshot
+
+service gpsd  /system/bin/glgps -c /system/etc/gpsconfig.xml
+    class main
+    disabled
+    user root
+    group system
+
+service preinst_clr /system/bin/preinstall_cleanup.sh
+    disabled
+    oneshot
+
+service preinstall /system/bin/preinstall.sh
+    class main
+    group root root
+    oneshot
+    disabled
+
+on property:ro.rk.btchip=broadcom.bplus
+    start gpsd
+
+on property:dev.bootcomplete=1
+    start preinstall

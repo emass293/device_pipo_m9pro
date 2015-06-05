@@ -1,0 +1,11 @@
+/misc		   emmc		/dev/block/mtdblock1	flags=backup=0;display="Misc"
+/kernel	           emmc	        /dev/block/mtdblock2    flags=backup=1;display="Kernel"
+/boot		   emmc		/dev/block/mtdblock3    flags=backup=1;display="Boot"
+/recovery	   emmc		/dev/block/mtdblock4	flags=backup=1;display="Recovery"
+/backup 	   emmc		/dev/block/mtdblock5	flags=backup=1;display="Backup"
+/cache		   ext4		/dev/block/mtdblock6	flags=backup=0;display="Cache"
+/metadata	   ext4		/dev/block/mtdblock7	flags=backup=0;display="Metadata"
+/system		   ext4		/dev/block/mtdblock9    flags=backup=1;display="System"
+/data              ext4         /dev/block/mtdblock10   flags=backup=1;display="Data"
+/external_sd	   vfat	        /dev/block/mmcblk0p1	/dev/block/mmcblk0	flags=wipeingui;storage;removable;display="External SD"
+/usb-otg	   vfat		/dev/block/sda	        /dev/block/sda1		flags=display="USB Storage";storage;wipeingui;removable
