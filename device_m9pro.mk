@@ -1,7 +1,6 @@
-TARGET_BUILD_TYPE := release #debug
-
 # default is nosdcard, S/W button enabled in resource
 DEVICE_FOLDER := device/pipo/m9pro
+#PRODUCT_TAGS += dalvik.gc.type-precise
 DEVICE_PACKAGE_OVERLAYS := $(DEVICE_FOLDER)/overlay
 PRODUCT_CHARACTERISTICS := tablet
 
@@ -110,7 +109,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
         service.adb.root=1 \
         ro.secure=0 \
-        ro.allow.mock.location=1 \
         ro.debuggable=1 \
         persist.sys.usb.config=mtp \
         ro.rk.systembar.voiceicon=true
@@ -126,6 +124,10 @@ PRODUCT_PROPERTY_OVERRIDES := \
 PRODUCT_PACKAGES += \
         drmservice
 
+# Torch
+#PRODUCT_PACKAGES += \
+#        Torch \
+
 # Camera
 PRODUCT_PACKAGES += \
         Camera \
@@ -133,21 +135,13 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
-        audio.primary.default \
         audio.primary.rk30board \
-        audio_policy.default \
         audio_policy.rk30board \
-        alsa.default \
         audio.alsa_usb.rk30board \
-        acoustics.default \
         audio.r_submix.default \
-        tinyplay \
-        tinycap \
-        tinymix \
         audio.a2dp.default \
-        audio.usb.default \
-        libtinyalsa \
-        libaudioutils
+        audio.usb.default
+
 
 # Hal modules
 PRODUCT_PACKAGES += \
@@ -175,21 +169,15 @@ PRODUCT_PACKAGES += \
 	libjpeghwdec \
 	libjpeghwenc \
         libjesancache \
-        libffmpeg_on2 \
-        libffmpeg \
         libhevcdec \
 	libOMX_Core \
 	libomxvpu_dec \
 	libomxvpu_enc \
 	librk_demux \
         libstagefrighthw \
-        libRkOMX_Resourcemanager \
 	librkwmapro \
-	libffmpeg \
-	librkffplayer \
   	librk_on2 \
         librkswscale \
-        libffmpegvpu \
         libvpu
 
 # filesystem tools
@@ -197,8 +185,8 @@ PRODUCT_PACKAGES += \
         make_ext4fs \
         setup_fs \
         static_busybox \
-        utility_make_ext4fs \
-        libstagefrighthw
+        utility_make_ext4fs
+
 
 # French
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -209,19 +197,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	dalvik.vm.dexopt-data-only=1
 
-# GPS
-PRODUCT_PACKAGES += \
-        libloc_adapter \
-        libloc_eng \
-        libgps.utils \
-        gps.rk30board
-
 # 3G
 PRODUCT_PACKAGES += \
         rild \
         chat
 
 # android core stuff
-$(call inherit-product, frameworks/native/build/tablet-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, build/target/product/full_base.mk)
 

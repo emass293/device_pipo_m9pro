@@ -2,7 +2,16 @@
 # preinstall
 if [ ! -e /data/.notfirstboot ]
 then
-    busybox touch /data/.notfirstboot
+
+   if [ -e /system/preinstall/recovery.img ]
+    then
+
+        flash_image recovery /system/preinstall/recovery.img
+        mount -o rw,remount /dev/block/mtdblock8 /system
+        mv /system/preinstall/recovery.img /system/preinstall/recovery.done
+
+        mount -o ro,remount /dev/block/mtdblock8 /system
+    fi
 
     if [ -e /mnt/external_sd/org.xbmc.xbmc/ ]
     then
@@ -12,7 +21,6 @@ then
           cp - r /mnt/external_sd/org.xbmc.xbmc/ /data/
         done
     fi
-
     
     if [ -e /system/preinstall/ ]
     then
@@ -32,14 +40,7 @@ then
         done
     fi
 
-    if [ -e /system/preinstall/recovery.img ]
-    then
+    busybox touch /data/.notfirstboot
 
-        flash_image recovery /system/preinstall/recovery.img
-        mount -o rw,remount /dev/block/mtdblock8 /system
-        mv /system/preinstall/recovery.img /system/preinstall/recovery.done
-
-        mount -o ro,remount /dev/block/mtdblock8 /system
-    fi
 fi
 exit

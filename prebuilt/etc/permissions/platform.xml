@@ -54,6 +54,10 @@
         <group gid="inet" />
     </permission>
 
+    <permission name="android.permission.CAMERA" >
+        <group gid="camera" />
+    </permission>
+
     <permission name="android.permission.READ_LOGS" >
         <group gid="log" />
     </permission>
@@ -113,6 +117,10 @@
         <group gid="loop_radio" />
     </permission>
 
+    <permission name="android.permission.HARDWARE_ABSTRACTION_ACCESS" >
+        <group gid="system" />
+    </permission>
+
     <!-- ================================================================== -->
     <!-- ================================================================== -->
     <!-- ================================================================== -->
@@ -140,8 +148,5 @@
             file="/system/framework/android.test.runner.jar" />
     <library name="javax.obex"
             file="/system/framework/javax.obex.jar"/>
-
-    <feature name="android.software.app_widgets"/>
-    <feature name="android.software.device_admin"/>
 
 </permissions>

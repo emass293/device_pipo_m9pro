@@ -3,10 +3,6 @@ LOCAL_PATH := $(call my-dir)
 ifeq ($(strip $(TARGET_BOARD_PLATFORM)),rk3188)
 
 # Use BUILD_PREBUILT instead of PRODUCT_COPY_FILES to bring in the NOTICE file.
-include $(CLEAR_VARS)
-LOCAL_PREBUILT_LIBS := libapedec.so                      
-LOCAL_MODULE_TAGS := optional
-include $(BUILD_MULTI_PREBUILT)
 
 include $(CLEAR_VARS)
 LOCAL_PREBUILT_LIBS := libjpeghwdec.so                   
@@ -35,11 +31,6 @@ include $(BUILD_MULTI_PREBUILT)
 
 include $(CLEAR_VARS)
 LOCAL_PREBUILT_LIBS := librk_demux.so                
-LOCAL_MODULE_TAGS := optional
-include $(BUILD_MULTI_PREBUILT)
-  
-include $(CLEAR_VARS)
-LOCAL_PREBUILT_LIBS := librkffplayer.so                      
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_MULTI_PREBUILT)
 

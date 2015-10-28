@@ -1,1 +1,1 @@
-add_lunch_combo cm_m9pro-eng
+add_lunch_combo cm_m9pro-userdebug

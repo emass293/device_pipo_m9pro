@@ -12,8 +12,6 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
-
-     900supersport
 -->
 
 <!-- These are the hardware components that all handheld devices
@@ -25,14 +23,8 @@
      devices.
 -->
 <permissions>
-    <feature name="android.hardware.wifi" />
-    <feature name="android.hardware.camera.front" />
-    <feature name="android.hardware.camera.autofocus" />
-    <feature name="android.hardware.location.gps" />
-    <feature name="android.hardware.camera" />
     <feature name="android.hardware.location" />
     <feature name="android.hardware.location.network" />
-    <feature name="android.hardware.location.provider" />
     <feature name="android.hardware.sensor.compass" />
     <feature name="android.hardware.sensor.accelerometer" />
     <feature name="android.hardware.touchscreen" />
@@ -41,6 +33,11 @@
     <feature name="android.hardware.microphone" />
     <feature name="android.hardware.screen.portrait" />
     <feature name="android.hardware.screen.landscape" />
+    <feature name="android.software.app_widgets" />
+    <feature name="android.software.home_screen" />
+    <feature name="android.software.input_methods" />
+    <!-- Feature to specify if the device supports adding device admins. -->
+    <feature name="android.software.device_admin" />
     <!-- devices with GPS must include android.hardware.location.gps.xml -->
     <!-- devices with a rear-facing camera must include one of these as appropriate:
          android.hardware.camera.xml or 
