@@ -1,0 +1,8 @@
+[
+  {
+    "remote":      "omnirom",
+    "repository":  "android_device_pipo_m9pro",
+    "target_path": "device/pipo/m9pro",
+    "revision":    "android-4.4"
+  }
+]

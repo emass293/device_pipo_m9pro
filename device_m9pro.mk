@@ -146,7 +146,6 @@ PRODUCT_PACKAGES += \
 # Hal modules
 PRODUCT_PACKAGES += \
 	lights.rk30board \
-   	power.rk3188 \
         sensors.rk30board \
         hwcomposer.rk30board \
         gralloc.rk30board \
