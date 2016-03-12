@@ -124,9 +124,6 @@ PRODUCT_PROPERTY_OVERRIDES := \
 PRODUCT_PACKAGES += \
         drmservice
 
-# Torch
-#PRODUCT_PACKAGES += \
-#        Torch \
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -149,6 +146,7 @@ PRODUCT_PACKAGES += \
         sensors.rk30board \
         hwcomposer.rk30board \
         gralloc.rk30board \
+	power.rk3188 \
         gpu.rk30board 
 
 
@@ -156,6 +154,7 @@ PRODUCT_PACKAGES += \
         librs_jni \
         com.android.future.usb.accessory
 
+#Bluethooth
 PRODUCT_PACKAGES += \
         com.broadcom.bt \
         com.broadcom.bt.xml \

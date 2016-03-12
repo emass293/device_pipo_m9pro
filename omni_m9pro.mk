@@ -8,6 +8,7 @@ $(call inherit-product, vendor/omni/config/common_tablet.mk)
 $(call inherit-product, device/pipo/m9pro/device_m9pro.mk)
 
 ## Device identifier. This must come after all inclusions
+
 PRODUCT_NAME := omni_m9pro
 PRODUCT_DEVICE := m9pro
 PRODUCT_BRAND := pipo

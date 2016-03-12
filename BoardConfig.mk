@@ -28,8 +28,8 @@ ARCH_ARM_HAVE_ARMV7A := true
 TARGET_BOARD_PLATFORM := rk3188
 TARGET_BOARD_HARDWARE := rk30board
 
-#TARGET_GLOBAL_CFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
-#TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a9 -mfpu=neon -mfloat-abi=softfp
 
 BOARD_KERNEL_CMDLINE := console=ttyFIQ0 androidboot.console=ttyFIQ0 init=/init initrd=0x62000000,0x00800000 mtdparts=rk29xxnand:0x00002000@0x00002000(misc),0x00006000@0x00004000(kernel),0x00006000@0x0000a000(boot),0x00010000@0x00010000(recovery),0x00020000@0x00020000(backup),0x00040000@0x00040000(cache),0x01000000@0x00080000(userdata),0x00003000@0x01080000(metadata),0x00003000@0x01083000(kpanic),0x00180000@0x01086000(system),-@0x01206000(user)
 #TARGET_PREBUILT_KERNEL := $(DEVICE_FOLDER)/kernel
@@ -76,7 +76,6 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_FOLDER)/bluetooth
-#BOARD_BLUEDROID_VENDOR_CONF := $(DEVICE_FOLDER)/bluetooth/vnd_rockchip.txt
 
 # Wifi
 BOARD_HAVE_WIFI := true
@@ -90,9 +89,6 @@ WIFI_DRIVER_FW_PATH_PARAM := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_RK901a2.bin"
 WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_RK901a2_p2p.bin"
 WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_RK901a2_apsta.bin"
-#WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcm4329.bin"
-#WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcm4329_p2p.bin"
-#WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcm4329_apsta.bin"
 WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/rkwifi.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan"
 
@@ -102,22 +98,4 @@ USE_OPENGL_RENDERER := true
 BOARD_USES_HGL := true
 BOARD_USES_OVERLAY := true
 TARGET_USES_ION := true
-#NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-
-# Audio
-#BOARD_USES_GENERIC_AUDIO := flase
-#BOARD_USES_ALSA_AUDIO := true
-
-# Camera Setup
-USE_CAMERA_STUB := true
-
-# No HWCOMPOSER - TO DO
-BOARD_USES_HWCOMPOSER := true
-#TARGET_FORCE_CPU_UPLOAD := true
-
-# Enable WEBGL in WebKit
-ENABLE_WEBGL := true
-
-#GPS
-BOARD_HAVE_GPS := true
 
